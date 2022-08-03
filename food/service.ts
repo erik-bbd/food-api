@@ -7,6 +7,10 @@ export class FoodService {
 
     constructor() {
         this.client = new Client({
+            // host: process.env.dbhost,
+            // user: process.env.dbuser,
+            // password: process.env.dbpassword,
+            // database: process.env.dbdatabase
             host: "localhost",
             user: "postgres",
             password: "password",
@@ -18,7 +22,7 @@ export class FoodService {
         
     }
 
-    allFood() {
+    get allFood() {
             return this.client.query({text: 'select row_to_json(food) from food', rowMode: 'array'})
     }
 

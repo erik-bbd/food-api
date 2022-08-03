@@ -4,7 +4,7 @@ import cors from "cors";
 import * as bodyparser from "body-parser"
 import { FoodController } from '../food/controller';
 import { FoodService } from "../food/service";
-import { Food } from "../food/interface";
+import bcrypt from "bcrypt";
 const urlParser = bodyparser.urlencoded({extended: false});
 const jsonParser = bodyparser.json();
 
@@ -18,6 +18,18 @@ const foodController = new FoodController(new FoodService)
 export async function routing(app: Express) {
     app.use(logRequest)
     app.use(cors())
+
+    app.route('/login')
+        .post(async (req, res) => {
+            var response
+            let status = 400
+            try {
+                const {name, email} = req.body
+                const hashedPassword = await bcrypt.hash(req.body.password, 10)
+            } catch {
+                
+            }
+        })
     
 
     app.route('/food')
@@ -26,7 +38,7 @@ export async function routing(app: Express) {
             let status = 400
 
             try {
-                response = await foodController.allFood
+                response = foodController.allFood
                 status = 200
             } catch (error: any) {
                 response = {message: "get failed..."}

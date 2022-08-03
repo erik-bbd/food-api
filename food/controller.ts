@@ -11,30 +11,24 @@ export class FoodController {
 
     async loadFood() {
         try {
-            // let foodArr: Food[] = []
-            const result = this.foodService.allFood
-
-            // console.log(result)
-            
-            // ((), (res) => {
-            //     res.rows.map(row => row.map(item => foodArr.push(item)))
-            // })
-            // this.foods = foodArr
+            let foodArr: Food[] = []
+            this.foodService.allFood.then((res) => {
+                res.rows.map(row => row.map(item => foodArr.push(item)))
+            })
+            this.foods = foodArr
         } catch (e) {
             console.log("Controller error")
         }
     }
 
-    allFood() {
+    get allFood() {
         return this.foods
     }
 
-    async newFood(food: Food): Promise<boolean> {
+    async newFood(food: Food) {
         try {
             const result = await this.foodService.newFood(food)
-            console.log(result)
-            this.loadFood()
-            return true
+            await this.loadFood()
         } catch (error) {
             console.log("Controller error")
             throw "Controller error"
