@@ -1,4 +1,4 @@
-import { RequestHandler, Express} from "express";
+import e, { RequestHandler, Express} from "express";
 import cors from "cors";
 
 import * as bodyparser from "body-parser"
@@ -15,19 +15,20 @@ const logRequest : RequestHandler = (req, res, next) => {
 
 const foodController = new FoodController(new FoodService)
 
-export function routing(app: Express) {
+export async function routing(app: Express) {
     app.use(logRequest)
     app.use(cors())
+    
 
     app.route('/food')
-        .get((req, res, next) => {
+        .get(async (req, res, next) => {
             var response
             let status = 400
 
             try {
-                response = foodController.allFood
+                response = await foodController.allFood
                 status = 200
-            } catch {
+            } catch (error: any) {
                 response = {message: "get failed..."}
             }
 
@@ -35,17 +36,18 @@ export function routing(app: Express) {
         })
         .post(async (req, res, next) => {
             var response
-            let status = 400
-
+            let status = 418
             try {
                 await foodController.newFood(req.body)
-                response = {message: "Successfully created food..."}
                 status = 201
-                
-            } catch {
-                response = {message: "Failed to create food..."}
+                response = "Food created..."
+            } catch(error) {
+                console.log("Router error")
+                response = "Duplicate food detected... creation failed"
             }
-
-            res.status(status).send(response)
+                
+                res.status(status).send(response)
         })
 }
+
+
