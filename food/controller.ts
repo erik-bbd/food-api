@@ -20,4 +20,9 @@ export class FoodController {
     get allFood() {
         return this.foods
     }
+
+    async newFood(food: Food) {
+        await this.foodService.newFood(food)
+        await this.loadFood()
+    }
 }
