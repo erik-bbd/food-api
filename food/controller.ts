@@ -1,34 +1,34 @@
-import { Food } from "./interface";
-import { FoodService } from './service';
+import { Food, Item } from "./interface";
+import { DataService } from './service';
 
 
 export class FoodController {
-    foods?: Food[]
+    items?: Food[]
 
-    constructor(private foodService: FoodService) {
-        this.loadFood()
+    constructor(private dataService: DataService) {
+        this.loadData()
     }
 
-    async loadFood() {
+    async loadData() {
         try {
-            let foodArr: Food[] = []
-            this.foodService.allFood.then((res) => {
-                res.rows.map(row => row.map(item => foodArr.push(item)))
+            let itemBuffer: any[] = []
+            this.dataService.allItems.then((res) => {
+                res.rows.map(row => row.map(item => itemBuffer.push(item)))
             })
-            this.foods = foodArr
+            this.items = itemBuffer
         } catch (e) {
             console.log("Controller error")
         }
     }
 
-    get allFood() {
-        return this.foods
+    get allItems() {
+        return this.items
     }
 
-    async newFood(food: Food) {
+    async newItem(item: any) {
         try {
-            const result = await this.foodService.newFood(food)
-            await this.loadFood()
+            const result = await this.dataService.newItem(item)
+            await this.loadData()
         } catch (error) {
             console.log("Controller error")
             throw "Controller error"

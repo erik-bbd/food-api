@@ -3,7 +3,7 @@ import cors from "cors";
 
 import * as bodyparser from "body-parser"
 import { FoodController } from '../food/controller';
-import { FoodService } from "../food/service";
+import { DataService } from "../food/service";
 import bcrypt from "bcrypt";
 const urlParser = bodyparser.urlencoded({extended: false});
 const jsonParser = bodyparser.json();
@@ -13,7 +13,7 @@ const logRequest : RequestHandler = (req, res, next) => {
     next();
 };
 
-const foodController = new FoodController(new FoodService)
+const foodController = new FoodController(new DataService)
 
 export async function routing(app: Express) {
     app.use(logRequest)
@@ -38,7 +38,7 @@ export async function routing(app: Express) {
             let status = 400
 
             try {
-                response = foodController.allFood
+                response = foodController.allItems
                 status = 200
             } catch (error: any) {
                 response = {message: "get failed..."}
@@ -46,11 +46,11 @@ export async function routing(app: Express) {
 
             res.status(status).send(response)
         })
-        .post(async (req, res, next) => {
+        .post(jsonParser, async (req, res, next) => {
             var response
             let status = 418
             try {
-                await foodController.newFood(req.body)
+                await foodController.newItem(req.body)
                 status = 201
                 response = "Food created..."
             } catch(error) {
