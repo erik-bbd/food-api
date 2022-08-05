@@ -1,39 +1,21 @@
 import { Food, Item } from "./interface";
-import { DataService } from './service';
+import { DataController } from '../data/controller';
+import { DataService } from '../data/service';
 
 
-export class FoodController {
+function foodObjectParser(obj: object) {
+    const columns = Object.keys(obj).join(", ")
+    let values = []
+    for (var value of Object.values(obj)) {
+        Array.isArray(value) ? values.push( `ARRAY ['${value.join(`','`)}']`): values.push(value.toString() === value ? `'${value}'` : value)
+    }
+    return { columns, values }
+}
+
+export class FoodController extends DataController {
     items?: Food[]
-
-    constructor(private dataService: DataService) {
-        this.loadData()
-    }
-
-    async loadData() {
-        try {
-            let itemBuffer: any[] = []
-            this.dataService.allItems.then((res) => {
-                res.rows.map(row => row.map(item => itemBuffer.push(item)))
-            })
-            this.items = itemBuffer
-        } catch (e) {
-            console.log("Controller error")
-        }
-    }
-
-    get allItems() {
-        return this.items
-    }
-
-    async newItem(item: any) {
-        try {
-            const result = await this.dataService.newItem(item)
-            await this.loadData()
-        } catch (error) {
-            console.log("Controller error")
-            throw "Controller error"
-        }
-            
-                 
+    constructor (dataService: DataService) {
+        super(dataService, foodObjectParser)
     }
 }
+

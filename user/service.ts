@@ -1,10 +1,9 @@
 import { DataService } from "../data/service";
 
-export class FoodService extends DataService {
+export class UserService extends DataService {
 
     constructor() {
-        super('food')
+        super('users')
     }
 
 }
-

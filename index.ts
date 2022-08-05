@@ -1,7 +1,7 @@
 import express from "express"
 import { routing } from './api/api';
 import dotenv from "dotenv"
-import session from 'express-session';
+
 
 
 dotenv.config()
