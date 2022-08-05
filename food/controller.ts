@@ -1,6 +1,6 @@
 import { Food, Item } from "./interface";
 import { DataController } from '../data/controller';
-import { DataService } from '../data/service';
+import { FoodService } from './service';
 
 
 function foodObjectParser(obj: object) {
@@ -14,7 +14,7 @@ function foodObjectParser(obj: object) {
 
 export class FoodController extends DataController {
     items?: Food[]
-    constructor (dataService: DataService) {
+    constructor (dataService: FoodService) {
         super(dataService, foodObjectParser)
     }
 }

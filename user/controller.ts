@@ -1,7 +1,8 @@
 import { User } from './user';
-import { DataService } from '../data/service';
+import { DatabaseService } from '../data/service';
 import { DataController } from "../data/controller";
 import { Food } from '../food/interface';
+import { UserService } from './service';
 
 function userObjectParser(obj: object) {
     const columns = Object.keys(obj).join(", ")
@@ -14,7 +15,7 @@ function userObjectParser(obj: object) {
 
 export class UserController extends DataController {
     items?: User[]
-    constructor (dataService: DataService) {
+    constructor (dataService: UserService) {
         super(dataService, userObjectParser)
     }
 

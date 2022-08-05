@@ -1,16 +1,16 @@
-import { DataService } from "./service"
+import { DatabaseService } from "./service"
 
 export class DataController {
     items?: any[]
 
-    constructor(private dataService: DataService, private objectParser: Function) {
+    constructor(private dataService: DatabaseService, private objectParser: Function) {
         this.loadData()
     }
 
     async loadData() {
         try {
             let itemBuffer: any[] = []
-            this.dataService.allItems.then((res) => {
+            this.dataService.allItems().then((res) => {
                 res.rows.map(row => row.map(item => itemBuffer.push(item)))
             })
             this.items = itemBuffer

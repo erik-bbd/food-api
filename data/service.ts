@@ -4,16 +4,15 @@ import format, { string } from 'pg-format';
 dotenv.config()
 
 
- interface DatabaseService {
-    client: Client
-    table: string
+ interface DataService {
+    client: any
 }
     
 
 
 
 
-export class DataService implements DatabaseService {
+export class DatabaseService implements DataService {
     client: Client
     table: string
 
@@ -31,14 +30,13 @@ export class DataService implements DatabaseService {
 
     }
 
-    get allItems() {
+    allItems() {
         return this.client.query({ text: `select row_to_json(${this.table}) from ${this.table}`, rowMode: 'array' })
     }
 
     async singleItem(obj: object) {
         const object = Object.entries(obj)[0]
         const condition = object[0] + ` = '${object[1]}'`
-        console.log(condition)
         return await this.client.query({ text: `select row_to_json(${this.table}) from ${this.table} where ${condition}`, rowMode: 'array' })
     }
 

@@ -48,7 +48,7 @@ export async function routing(app: Express) {
 
 
     app.route('/login')
-        .post(jsonParser, passport.authenticate('local', {failureMessage:'User authentication failed', session: false})
+        .post(jsonParser, passport.authenticate('local', {failureMessage:'User authentication failed', session: true})
         , (req, res) => {
             console.log(req.user)
             res.status(200).json({
@@ -81,15 +81,24 @@ export async function routing(app: Express) {
     
 
     app.route('/food')
-        .get(async (req, res, next) => {
+        .get( async (req, res, next) => {
             var response
             let status = 418
-            try {
-                response = foodController.allItems
-                status = 200
-            } catch (error: any) {
-                response = {message: "get failed..."}
+
+            if (req.isAuthenticated()) {
+                try {
+                    response = foodController.allItems
+                    status = 200
+                } catch (error: any) {
+                    response = {message: "get failed..."}
+                }
+                //res.status(status).send(response)
+            } else {
+                response = "Not authenticated"
             }
+
+            
+            
             res.status(status).send(response)
         })
         .post(jsonParser, async (req, res, next) => {

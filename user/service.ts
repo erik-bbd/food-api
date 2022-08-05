@@ -1,6 +1,6 @@
-import { DataService } from "../data/service";
+import { DatabaseService } from "../data/service";
 
-export class UserService extends DataService {
+export class UserService extends DatabaseService {
 
     constructor() {
         super('users')
