@@ -4,6 +4,7 @@ import { FoodService } from './service';
 
 
 function foodObjectParser(obj: object) {
+    console.log(obj)
     const columns = Object.keys(obj).join(", ")
     let values = []
     for (var value of Object.values(obj)) {

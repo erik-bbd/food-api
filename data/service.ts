@@ -46,5 +46,17 @@ export class DatabaseService implements DataService {
         return await this.client.query(`insert into ${this.table} (${columns}) values (${values})`)
     }
 
+    async updateItem(obj: object, IObjectParser: Function) {
+        const {columns, values} = IObjectParser(obj)
+        console.log(`update ${this.table} set ${columns} values (${values}) where name=${values[0]}`)
+        return await this.client.query(`update ${this.table} (${columns}) values (${values}) where name=${values[0]}`)
+    }
+
+    async deleteItem(obj: object) {
+        console.log(obj)
+        console.log(`delete from ${this.table} where name='${obj}'`)
+        return await this.client.query(`delete from ${this.table} where name='${obj}'`)
+    }
+
 }
 

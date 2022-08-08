@@ -32,8 +32,28 @@ export class DataController {
             const result = await this.dataService.newItem(item, this.objectParser)
             await this.loadData()
         } catch (error) {
-            console.log("Controller error")
+            console.log("Controller error" + error)
             throw "Controller error"
         }
+    }
+
+    async updateItem(item: any) {
+        try {
+            const result = await this.dataService.updateItem(item, this.objectParser)
+            await this.loadData()
+        } catch (error) {
+            console.log("Controller error" + error)
+            throw "Controller error"
+        }
+    }
+
+    async deleteItem(item: any) {
+        try {
+            const result = await this.dataService.deleteItem(item)
+            await this.loadData()
+        } catch (e) {
+            console.log(e)
+        }
+        
     }
 }

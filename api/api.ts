@@ -11,6 +11,7 @@ import { UserService } from "../user/service";
 import { User } from '../user/user';
 import flash from "express-flash";
 import { urlencoded } from "body-parser";
+import { Food } from '../food/interface';
 
 
 const jsonParser = bodyparser.json();
@@ -35,7 +36,11 @@ console.log()
 export async function routing(app: Express) {
 
     app.use(logRequest)
-    app.use(cors())
+    app.use(cors({
+        credentials: true,
+        origin: 'http://localhost:4200'
+        
+    }))
     app.use(urlencoded({extended: false}))
     app.use(flash())
     app.use(session({
@@ -68,7 +73,8 @@ export async function routing(app: Express) {
                 const user: User = {
                     username: username,
                     email: email,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    type: "user"
                 }
                 await userController.newItem(user)
                 response = "User successfully created..."
@@ -107,12 +113,43 @@ export async function routing(app: Express) {
             try {
                 await foodController.newItem(req.body)
                 status = 201
-                response = "Food created..."
+                response = {message: "Food created..."}
             } catch(error) {
                 console.log("Router error")
-                response = "Duplicate food detected... creation failed"
+                response = {message: "Duplicate food detected... creation failed"}
             }
                 res.status(status).send(response)
+        })
+        .patch(jsonParser, async (req, res) => {
+            var response
+            let status = 418
+            try {
+                await foodController.updateItem(req.body)
+                status = 201
+                response = {message: "Food updated..."}
+            } catch(error) {
+                console.log("Router error")
+                response = {message: "Duplicate food detected... creation failed"}
+            }
+                res.status(status).send(response)
+        })
+        
+    app.route('/food/:name')
+        .delete(async (req, res) => {
+            if(req.isAuthenticated()) {
+                var response
+                let status = 418
+                console.log(req.params.name + "test")
+                try {
+                    await foodController.deleteItem(req.params.name)
+                    status = 201
+                    response = {message: "Food removed..."}
+                } catch(error) {
+                    console.log("Router error")
+                    response = {message: "Duplicate food detected... creation failed"}
+                }
+                res.status(status).send(response)
+            }
         })
 }
 
